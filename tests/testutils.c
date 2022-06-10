@@ -1,11 +1,15 @@
 #include<stdio.h>
 
+short testresults = 0;
+
 int printtest(char *testname, short passed) {
 	if (passed)
-		printf("%s test: \033[32m PASSED\033[m\n", testname);
+		printf("%s test: PASSED\n", testname);
 
-	else
-		printf("%s test: \033[31m REPROVED\033[m\n", testname);
+	else {
+		testresults = 1;
+		printf("%s test: REPROVED\n", testname);
+	}
 
 	return(passed);
 }

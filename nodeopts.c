@@ -35,6 +35,8 @@ MathNode *create_leaf(signed long num) {
 int main() {
 	MathNode *new_node = create_node(create_leaf(2), create_leaf(42), OP_SUM);
 
+	extern short testresults;
+
 	if ((new_node->x->result == 2) && (new_node->y->result == 42))
 		printtest("leaf", 1);
 	else
@@ -45,6 +47,6 @@ int main() {
 	else
 		printtest("new node", 0);
 
-	return(0);
+	return(testresults);
 }
 #endif
