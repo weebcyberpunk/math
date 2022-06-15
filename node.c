@@ -1,7 +1,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<errno.h>
-#include"mathnode.h"
+#include"math.h"
 
 /*
  * author GG weebcyberpunk@gmail.com
@@ -42,7 +42,7 @@ int main() {
 	else
 		printtest("leaf", 0);
 
-	if ((new_node->operation_info == OP_SUM))
+	if (new_node->operation_info == OP_SUM)
 		printtest("new node", 1);
 	else
 		printtest("new node", 0);
