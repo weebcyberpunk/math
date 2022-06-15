@@ -1,3 +1,4 @@
+#define EVALUATED	128
 #define OP_NULL      	0
 #define OP_SUM      	1 
 #define OP_SUBTRACT 	2 

@@ -25,7 +25,7 @@ MathNode *create_leaf(signed long num) {
 	new_node->result = num;
 	new_node->x = NULL;
 	new_node->y = NULL;
-	new_node->operation_info = OP_NULL;
+	new_node->operation_info = OP_NULL | EVALUATED;
 
 	return(new_node);
 }
@@ -37,7 +37,7 @@ int main() {
 
 	extern short testresults;
 
-	if ((new_node->x->result == 2) && (new_node->y->result == 42))
+	if ((new_node->x->result == 2) && (new_node->y->result == 42) && (new_node->y->operation_info & EVALUATED))
 		printtest("leaf", 1);
 	else
 		printtest("leaf", 0);
