@@ -1,7 +1,8 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<errno.h>
-#include"math.h"
+#include"mathtree.h"
+#include"operations.h"
 
 /*
  * author GG weebcyberpunk@gmail.com
@@ -28,6 +29,38 @@ MathNode *create_leaf(signed long num) {
 	new_node->operation_info = OP_NULL | EVALUATED;
 
 	return(new_node);
+}
+
+/*
+ * to evaluate theese shit we recursively searches the tree, evaluating each
+ * node alone
+ */
+int evaluate(MathNode *node) {
+
+	if (node->x != NULL) {
+		evaluate(node->x);
+
+	} else if (node->y != NULL) {
+		evaluate(node->y);
+
+	}
+
+	/*
+	 * to work we MUST be CERTAIN that evaluate() ensures a valid number
+	 * exists at *node->x->result and y
+	 */
+	if (node->operation_info & EVALUATED)
+		return(errno);
+
+	node->result = calc(
+			node->operation_info, 
+			node->x->result, 
+			node->y->result
+			);
+
+	node->operation_info = node->operation_info & EVALUATED;
+
+	return(errno);
 }
 
 #ifdef TEST

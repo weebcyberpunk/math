@@ -1,12 +1,4 @@
 #define EVALUATED	128
-#define OP_NULL      	0
-#define OP_SUM      	1 
-#define OP_SUBTRACT 	2 
-#define OP_DIVIDE   	3 
-#define OP_MULTIPLY 	4 
-#define OP_ROOT     	5 
-#define OP_POWER    	6 
-#define OP_FACTORIAL	7 
 /*
  * the tree is constructed pointing the operands of an operation to the result
  * of another
@@ -29,3 +21,4 @@ typedef struct MathNode {
 MathNode *create_node(MathNode *x, MathNode *y, signed short operation);
 MathNode *create_leaf(signed long result);
 int evaluate(MathNode *node);
+unsigned long calc(unsigned long x, unsigned long y, signed short op);
