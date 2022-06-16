@@ -8,20 +8,20 @@
  * since Jun 15, 2022
  */
 
-unsigned long root() {
-	unsigned long r;
+signed long root() {
+	signed long r;
 
 	return(r);
 }
 
-unsigned long power() {
-	unsigned long r;
+signed long power() {
+	signed long r;
 
 	return(r);
 }
 
-unsigned long factorial() {
-	unsigned long r;
+signed long factorial() {
+	signed long r;
 
 	return(r);
 }

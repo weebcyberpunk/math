@@ -9,10 +9,10 @@
  * version 0.0.0
  * since Jun 15, 2022
  */
-unsigned long calc(unsigned long x, unsigned long y, signed short op) {
+signed long calc(signed long x, signed long y, signed short op) {
 
 	// this make sure it will return something actually usefull
-	unsigned long r = x;
+	signed long r = x;
 
 	// note: if mvb of op is 1, it will 
 	switch (op) {
@@ -36,13 +36,13 @@ unsigned long calc(unsigned long x, unsigned long y, signed short op) {
 			r = factorial(x);
 		default:
 			errno = 1;
-			fprintf(stderr, "WARNING: invalid operation with %lu and %lu ignored, passing x: %lu instead.\n", x, y, x);
+			fprintf(stderr, "WARNING: invalid operation %i with %lu and %lu ignored, passing x: %lu instead.\n", op, x, y, x);
 	}
 
 	return(r);
 }
 
-#ifdef TEST
+#ifdef TESTCALC
 #include"tests/testutils.h"
 int main() {
 

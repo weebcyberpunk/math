@@ -1,4 +1,4 @@
-#define EVALUATED	128
+#define EVALUATED (unsigned short) 128
 /*
  * the tree is constructed pointing the operands of an operation to the result
  * of another
@@ -21,4 +21,4 @@ typedef struct MathNode {
 MathNode *create_node(MathNode *x, MathNode *y, signed short operation);
 MathNode *create_leaf(signed long result);
 int evaluate(MathNode *node);
-unsigned long calc(unsigned long x, unsigned long y, signed short op);
+signed long calc(signed long x, signed long y, signed short op);
