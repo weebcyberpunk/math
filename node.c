@@ -53,6 +53,8 @@ int evaluate(MathNode *node) {
 	if (node->operation_info & EVALUATED)
 		return(errno);
 
+	printf("opinfo is not eval: %x\n", node->operation_info);
+
 	node->result = calc(
 			node->x->result, 
 			node->y->result,
@@ -89,6 +91,8 @@ int main() {
 #include"tests/testutils.h"
 int main() {
 	extern short testresults;
+
+	printf("%x\n", EVALUATED);
 
 	MathNode *singlenode = create_leaf(42);
 	evaluate(singlenode);

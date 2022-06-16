@@ -9,7 +9,7 @@
  * version 0.0.0
  * since Jun 15, 2022
  */
-signed long calc(signed long x, signed long y, signed short op) {
+signed long calc(signed long x, signed long y, unsigned short op) {
 
 	// this make sure it will return something actually usefull
 	signed long r = x;
@@ -21,22 +21,23 @@ signed long calc(signed long x, signed long y, signed short op) {
 			fprintf(stderr, "ERROR: tried to calculate OP_NULL operation with %lu and %lu.\n", x, y);
 			fprintf(stderr, "WARNING: OP_NULL operation ignored, passing x: %lu instead.\n", x);
 		case OP_SUM:
-			r = x + y;
+			r = x + y; break;
 		case OP_SUBTRACT:
-			r = x - y;
+			r = x - y; break;
 		case OP_DIVIDE:
-			r = x / y;
+			r = x / y; break;
 		case OP_MULTIPLY:
-			r = x * y;
+			r = x * y; break;
 		case OP_ROOT:
-			r = root(x, y);
+			r = root(x, y); break;
 		case OP_POWER:
-			r = power(x, y);
+			r = power(x, y); break;
 		case OP_FACTORIAL:
-			r = factorial(x);
+			r = factorial(x); break;
 		default:
 			errno = 1;
 			fprintf(stderr, "WARNING: invalid operation %i with %lu and %lu ignored, passing x: %lu instead.\n", op, x, y, x);
+			break;
 	}
 
 	return(r);

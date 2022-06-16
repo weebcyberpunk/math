@@ -15,10 +15,10 @@ typedef struct MathNode {
 	struct MathNode *x;
 	struct MathNode *y;
 	signed long result;
-	signed short operation_info;
+	unsigned short operation_info;
 } MathNode;
 
 MathNode *create_node(MathNode *x, MathNode *y, signed short operation);
 MathNode *create_leaf(signed long result);
 int evaluate(MathNode *node);
-signed long calc(signed long x, signed long y, signed short op);
+signed long calc(signed long x, signed long y, unsigned short op);
