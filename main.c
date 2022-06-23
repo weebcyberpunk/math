@@ -45,11 +45,18 @@ signed long *dp;
  * since Jun 22, 2022
  */
 
-// pops something from stack
+// pops something from stack. crashes the program if empty stack (for security
+// reasons)
 signed long pop() {
 
-	signed long num = *dp;
-	dp--;
+	signed long num = 0;
+	if (dp >= stack) {
+		num = *dp;
+		dp--;
+	} else {
+		fprintf(stderr, "ERROR: Cannot pop from empty stack.\n");
+		exit(EADDRNOTAVAIL);
+	}
 
 	return(num);
 }
