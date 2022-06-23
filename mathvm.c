@@ -77,19 +77,26 @@ int push(signed long num) {
 	return(errno);
 }
 
-// inits the machine
-int init() {
-	stack = (signed long*) malloc(STACK_INIT_SIZE * sizeof(signed long));
-	dp = stack - 1;
+int run() {
 
 	return(errno);
 }
 
-// run the compiled program if the file starts with the file indicator, or call
-// the compiler to compile it and return a text pointer
-int main(int argv, char *argc[]) {
+// inits the machine
+int init(char *_text) {
 
-	init();
+	stack = (signed long*) malloc(STACK_INIT_SIZE * sizeof(signed long));
+
+	if (stack == NULL) {
+		int errv = errno;
+		fprintf(stderr, "ERROR: Cannot init computation.\n");
+		exit(errv);
+	}
+
+	dp = stack - 1;
+	text = _text;
+
+	run();
 
 	return(errno);
 }
