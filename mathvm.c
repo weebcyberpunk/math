@@ -33,8 +33,8 @@
 
 // stack should only be touched by push() and pop() so it can increase properly
 // easily, but NO WAY SOMEONE WILL NEED MORE THAN 1 FUCKING KILOBYTE
-char *text;
-char *ip;
+signed long *text;
+signed long *ip;
 signed long *stack;
 signed long stack_size = STACK_INIT_SIZE;
 signed long *dp;
@@ -78,12 +78,21 @@ int push(signed long num) {
 }
 
 int run() {
+#ifdef DEBUG
+	printf("REACHED RUN:\n");
+	printf("text: %p\n", text);
+	printf("ip: %p\n", ip);
+	printf("stack: %p\n", stack);
+	printf("dp: %p\n", dp);
+	printf("\n");
+#endif
 
 	return(errno);
 }
 
-// inits the machine
-int init(char *_text) {
+// inits the machine. text needs to be ONLY code, get rid of the file
+// identificator before calling it.
+int init(signed long *_text) {
 
 	stack = (signed long*) malloc(STACK_INIT_SIZE * sizeof(signed long));
 
@@ -95,8 +104,25 @@ int init(char *_text) {
 
 	dp = stack - 1;
 	text = _text;
+	ip = text;
 
 	run();
 
 	return(errno);
 }
+
+#ifdef DEBUG
+int main() {
+	// 2 . (20 - 5) / (2 + 1)
+	signed long text[] = {
+		'<', 2, '<', 20, '<', 5,
+		'-',
+		'*',
+		'<', 2, '<', 1,
+		'+',
+		'/',
+		EOF
+	};
+	init(text);
+}
+#endif
