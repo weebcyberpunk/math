@@ -48,11 +48,6 @@ signed long *dp;
 // pops something from stack
 signed long pop() {
 
-	if ((dp == NULL) || (stack == NULL)) {
-		errno = EADDRNOTAVAIL;
-		return(errno);
-	}
-
 	signed long num = *dp;
 	dp--;
 
@@ -62,39 +57,32 @@ signed long pop() {
 // pushes something to stack
 int push(signed long num) {
 
-	if ((dp + 1) - stack == stack_size) {
-		stack_size += STACK_INIT_SIZE;
-		stack = realloc(stack, stack_size);
-		dp = stack + stack_size;
-	}
-
-	if ((dp == NULL) || (stack == NULL)) {
-		errno = EADDRNOTAVAIL;
-		return(errno);
-	}
-
 	dp++;
+	if ((dp - stack) > stack_size) {
+		stack_size += STACK_INIT_SIZE;
+		printf("stack size: %lu\n", stack_size);
+		stack = realloc(stack, stack_size);
+		dp = &stack[stack_size - STACK_INIT_SIZE + 1];
+		printf("realloced\n");
+	}
 	*dp = num;
 
 	return(errno);
 }
 
-#ifdef DEBUG
+// inits the machine
+int init() {
+	stack = (signed long*) malloc(STACK_INIT_SIZE * sizeof(signed long));
+	dp = stack - 1;
 
-int dump_stack() {
-	for (int c = 0; c < 10; c++)
-		printf("%ld ", stack[c]);
-
-	printf("\ndp - stack: %ld\n", dp - stack);
-
-	return(0);
+	return(errno);
 }
-
-#endif
 
 // run the compiled program if the file starts with the file indicator, or call
 // the compiler to compile it and return a text pointer
 int main(int argv, char *argc[]) {
+
+	init();
 
 	return(errno);
 }
