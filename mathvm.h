@@ -9,4 +9,4 @@
 #define $PUSH 	'<'
 #define $EXIT 	EOF
 
-int init(signed long *text);
+signed long init(signed long *text);

@@ -45,6 +45,18 @@ signed long *dp;
  * since Jun 22, 2022
  */
 
+#ifdef DEBUG
+int stack_dump() {
+
+	for (signed long *pt = stack; pt <= dp; pt++)
+		printf("%lu ", *pt);
+
+	printf("\n");
+
+	return(errno);
+}
+#endif
+
 // pops something from stack. crashes the program if empty stack (for security
 // reasons)
 signed long pop() {
@@ -67,17 +79,22 @@ int push(signed long num) {
 	dp++;
 	if ((dp - stack) > stack_size) {
 		stack_size += STACK_INIT_SIZE;
-		printf("stack size: %lu\n", stack_size);
 		stack = realloc(stack, stack_size);
+
+		if (stack == NULL) {
+			int errv = errno;
+			fprintf(stderr, "ERROR: cannot increase stack\n");
+			exit(errv);
+		}
+
 		dp = &stack[stack_size - STACK_INIT_SIZE + 1];
-		printf("realloced\n");
 	}
 	*dp = num;
 
 	return(errno);
 }
 
-int run() {
+signed long run() {
 #ifdef DEBUG
 	printf("REACHED RUN:\n");
 	printf("text: %p\n", text);
@@ -87,12 +104,67 @@ int run() {
 	printf("\n");
 #endif
 
-	return(errno);
+	signed long x, y;
+	while (*ip != $EXIT) {
+		switch (*ip) {
+			case $ADD:
+				x = pop();
+				y = pop();
+				push(y + x);
+#ifdef DEBUG
+				printf("Pushing on sum: %lu\n", x + y);
+				stack_dump();
+#endif
+				break;
+			case $SUB:
+				x = pop();
+				y = pop();
+				push(y - x);
+#ifdef DEBUG
+				printf("Pushing on sub: %lu\n", y - x);
+				stack_dump();
+#endif
+				break;
+			case $MUL:
+				x = pop();
+				y = pop();
+				push(y * x);
+#ifdef DEBUG
+				printf("Pushing on mul: %lu\n", y * x);
+				stack_dump();
+#endif
+				break;
+			case $DIV:
+				x = pop();
+				y = pop();
+				push(y / x);
+#ifdef DEBUG
+				printf("Pushing on div: %lu\n", y / x);
+				stack_dump();
+#endif
+				break;
+			case $PUSH:
+				ip++;
+				push(*ip);
+#ifdef DEBUG
+				printf("Pushing: %lu\n", *ip);
+				stack_dump();
+#endif
+				break;
+			default:
+				fprintf(stderr, "ERROR: Invalid instruction %lux\n", *ip);
+				exit(ENOTSUP);
+		}
+
+		ip++;
+	}
+
+	return(*dp);
 }
 
 // inits the machine. text needs to be ONLY code, get rid of the file
 // identificator before calling it.
-int init(signed long *_text) {
+signed long init(signed long *_text) {
 
 	stack = (signed long*) malloc(STACK_INIT_SIZE * sizeof(signed long));
 
@@ -106,9 +178,7 @@ int init(signed long *_text) {
 	text = _text;
 	ip = text;
 
-	run();
-
-	return(errno);
+	return(run());
 }
 
 #ifdef DEBUG
@@ -123,6 +193,6 @@ int main() {
 		'/',
 		EOF
 	};
-	init(text);
+	printf("%lu\n", init(text));
 }
 #endif
