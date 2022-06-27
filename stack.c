@@ -5,7 +5,7 @@
 
 /*
  * author GG weebcyberpunk@gmail.com
- * version 0.0.0
+ * version 1.0.0
  * since Jun 27, 2022
  */
 
@@ -43,7 +43,7 @@ int push(Stack *stack, signed long value) {
 	if ((stack->dp - stack->stack) > stack->stack_size) {
 		stack->stack_size += stack->stack_init_size;
 		stack->stack = realloc(stack->stack, stack->stack_size);
-#ifdef DEBUG
+#ifdef DEBUG_STACK
 		printf("Reallocing stack %p\n", stack->stack);
 #endif
 

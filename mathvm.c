@@ -40,7 +40,7 @@ Stack *stack;
 
 /*
  * author GG weebcyberpunk@gmail.com
- * version 0.0.0
+ * version 1.0.0
  * since Jun 22, 2022
  */
 
@@ -65,7 +65,7 @@ int pop_vm(signed long *pop_var) {
 }
 
 signed long run() {
-#ifdef DEBUG
+#ifdef DEBUG_VM
 	printf("REACHED RUN:\n");
 	printf("text: %p\n", text);
 	printf("ip: %p\n", ip);
@@ -81,7 +81,7 @@ signed long run() {
 				pop_vm(&x);
 				pop_vm(&y);
 				push_vm(y + x);
-#ifdef DEBUG
+#ifdef DEBUG_VM
 				printf("push_vming on sum: %lu\n", x + y);
 				stack_dump(stack);
 #endif
@@ -90,7 +90,7 @@ signed long run() {
 				pop_vm(&x);
 				pop_vm(&y);
 				push_vm(y - x);
-#ifdef DEBUG
+#ifdef DEBUG_VM
 				printf("push_vming on sub: %lu\n", y - x);
 				stack_dump(stack);
 #endif
@@ -99,7 +99,7 @@ signed long run() {
 				pop_vm(&x);
 				pop_vm(&y);
 				push_vm(y * x);
-#ifdef DEBUG
+#ifdef DEBUG_VM
 				printf("push_vming on mul: %lu\n", y * x);
 				stack_dump(stack);
 #endif
@@ -108,7 +108,7 @@ signed long run() {
 				pop_vm(&x);
 				pop_vm(&y);
 				push_vm(y / x);
-#ifdef DEBUG
+#ifdef DEBUG_VM
 				printf("push_vming on div: %lu\n", y / x);
 				stack_dump(stack);
 #endif
@@ -116,7 +116,7 @@ signed long run() {
 			case $PUSH:
 				ip++;
 				push_vm(*ip);
-#ifdef DEBUG
+#ifdef DEBUG_VM
 				printf("push_vming: %lu\n", *ip);
 				stack_dump(stack);
 #endif
@@ -148,7 +148,7 @@ signed long init(signed long *_text) {
 	return(run());
 }
 
-#ifdef DEBUG
+#ifdef DEBUG_VM
 int main() {
 	// 2 . (20 - 5) / (2 + 1)
 	signed long text[] = {
