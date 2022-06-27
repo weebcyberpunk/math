@@ -1,5 +1,5 @@
 math-debug : mathvm.c mathvm.h
-	cc -D DEBUG mathvm.c -o math-debug
+	cc -D DEBUG mathvm.c stack.c -o math-debug
 
 .PHONY : debug
 

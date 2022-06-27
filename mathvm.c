@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<errno.h>
 #include"mathvm.h"
+#include"stack.h"
 
 /*
  * LICENSE {{{
@@ -31,13 +32,11 @@
  * Stack-based machine to perform arithmetic operations
  */
 
-// stack should only be touched by push() and pop() so it can increase properly
+// stack should only be touched by push_vm(stack, ) and pop_vm() so it can increase properly
 // easily, but NO WAY SOMEONE WILL NEED MORE THAN 1 FUCKING KILOBYTE
 signed long *text;
 signed long *ip;
-signed long *stack;
-signed long stack_size = STACK_INIT_SIZE;
-signed long *dp;
+Stack *stack;
 
 /*
  * author GG weebcyberpunk@gmail.com
@@ -45,51 +44,22 @@ signed long *dp;
  * since Jun 22, 2022
  */
 
-#ifdef DEBUG
-int stack_dump() {
+int push_vm(signed long value) {
 
-	for (signed long *pt = stack; pt <= dp; pt++)
-		printf("%lu ", *pt);
-
-	printf("\n");
+	if (push(stack, value) != 0) {
+		fprintf(stderr, "ERROR: Cannot increase stack: %m\n", errno);
+		exit(errno);
+	}
 
 	return(errno);
 }
-#endif
 
-// pops something from stack. crashes the program if empty stack (for security
-// reasons)
-signed long pop() {
+int pop_vm(signed long *pop_var) {
 
-	signed long num = 0;
-	if (dp >= stack) {
-		num = *dp;
-		dp--;
-	} else {
-		fprintf(stderr, "ERROR: Cannot pop from empty stack.\n");
-		exit(EADDRNOTAVAIL);
+	if (pop(stack, pop_var) != 0) {
+		fprintf(stderr, "ERROR: Cannot pop from empty stack: %m\n", errno);
+		exit(errno);
 	}
-
-	return(num);
-}
-
-// pushes something to stack
-int push(signed long num) {
-
-	dp++;
-	if ((dp - stack) > stack_size) {
-		stack_size += STACK_INIT_SIZE;
-		stack = realloc(stack, stack_size);
-
-		if (stack == NULL) {
-			int errv = errno;
-			fprintf(stderr, "ERROR: cannot increase stack\n");
-			exit(errv);
-		}
-
-		dp = &stack[stack_size - STACK_INIT_SIZE + 1];
-	}
-	*dp = num;
 
 	return(errno);
 }
@@ -99,8 +69,8 @@ signed long run() {
 	printf("REACHED RUN:\n");
 	printf("text: %p\n", text);
 	printf("ip: %p\n", ip);
-	printf("stack: %p\n", stack);
-	printf("dp: %p\n", dp);
+	printf("stack: %p\n", stack->stack);
+	printf("dp: %p\n", stack->dp);
 	printf("\n");
 #endif
 
@@ -108,47 +78,47 @@ signed long run() {
 	while (*ip != $EXIT) {
 		switch (*ip) {
 			case $ADD:
-				x = pop();
-				y = pop();
-				push(y + x);
+				pop_vm(&x);
+				pop_vm(&y);
+				push_vm(y + x);
 #ifdef DEBUG
-				printf("Pushing on sum: %lu\n", x + y);
-				stack_dump();
+				printf("push_vming on sum: %lu\n", x + y);
+				stack_dump(stack);
 #endif
 				break;
 			case $SUB:
-				x = pop();
-				y = pop();
-				push(y - x);
+				pop_vm(&x);
+				pop_vm(&y);
+				push_vm(y - x);
 #ifdef DEBUG
-				printf("Pushing on sub: %lu\n", y - x);
-				stack_dump();
+				printf("push_vming on sub: %lu\n", y - x);
+				stack_dump(stack);
 #endif
 				break;
 			case $MUL:
-				x = pop();
-				y = pop();
-				push(y * x);
+				pop_vm(&x);
+				pop_vm(&y);
+				push_vm(y * x);
 #ifdef DEBUG
-				printf("Pushing on mul: %lu\n", y * x);
-				stack_dump();
+				printf("push_vming on mul: %lu\n", y * x);
+				stack_dump(stack);
 #endif
 				break;
 			case $DIV:
-				x = pop();
-				y = pop();
-				push(y / x);
+				pop_vm(&x);
+				pop_vm(&y);
+				push_vm(y / x);
 #ifdef DEBUG
-				printf("Pushing on div: %lu\n", y / x);
-				stack_dump();
+				printf("push_vming on div: %lu\n", y / x);
+				stack_dump(stack);
 #endif
 				break;
 			case $PUSH:
 				ip++;
-				push(*ip);
+				push_vm(*ip);
 #ifdef DEBUG
-				printf("Pushing: %lu\n", *ip);
-				stack_dump();
+				printf("push_vming: %lu\n", *ip);
+				stack_dump(stack);
 #endif
 				break;
 			default:
@@ -159,22 +129,19 @@ signed long run() {
 		ip++;
 	}
 
-	return(*dp);
+	signed long result = *stack->dp;
+	free(stack->stack);
+	free(stack);
+
+	return(result);
 }
 
 // inits the machine. text needs to be ONLY code, get rid of the file
 // identificator before calling it.
 signed long init(signed long *_text) {
 
-	stack = (signed long*) malloc(STACK_INIT_SIZE * sizeof(signed long));
+	stack = stack_init(STACK_INIT_SIZE);
 
-	if (stack == NULL) {
-		int errv = errno;
-		fprintf(stderr, "ERROR: Cannot init computation.\n");
-		exit(errv);
-	}
-
-	dp = stack - 1;
 	text = _text;
 	ip = text;
 
