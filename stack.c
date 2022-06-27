@@ -43,6 +43,9 @@ int push(Stack *stack, signed long value) {
 	if ((stack->dp - stack->stack) > stack->stack_size) {
 		stack->stack_size += stack->stack_init_size;
 		stack->stack = realloc(stack->stack, stack->stack_size);
+#ifdef DEBUG
+		printf("Reallocing stack %p\n", stack->stack);
+#endif
 
 		if (stack->stack == NULL) {
 			return(errno);

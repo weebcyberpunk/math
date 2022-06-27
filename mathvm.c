@@ -32,7 +32,7 @@
  * Stack-based machine to perform arithmetic operations
  */
 
-// stack should only be touched by push_vm(stack, ) and pop_vm() so it can increase properly
+// stack should only be touched by push_vm() and pop_vm() so it can be handled properly
 // easily, but NO WAY SOMEONE WILL NEED MORE THAN 1 FUCKING KILOBYTE
 signed long *text;
 signed long *ip;
