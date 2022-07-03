@@ -47,8 +47,9 @@ Stack *stack;
 int push_vm(signed long value) {
 
 	if (push(stack, value) != 0) {
-		fprintf(stderr, "ERROR: Cannot increase stack: %m\n", errno);
-		exit(errno);
+		int errv = errno;
+		fprintf(stderr, "ERROR: Cannot increase stack: %m\n");
+		exit(errv);
 	}
 
 	return(errno);
@@ -57,8 +58,9 @@ int push_vm(signed long value) {
 int pop_vm(signed long *pop_var) {
 
 	if (pop(stack, pop_var) != 0) {
-		fprintf(stderr, "ERROR: Cannot pop from empty stack: %m\n", errno);
-		exit(errno);
+		int errv = errno;
+		fprintf(stderr, "ERROR: Cannot pop from empty stack: %m\n");
+		exit(errv);
 	}
 
 	return(errno);

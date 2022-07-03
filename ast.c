@@ -31,7 +31,7 @@ int discard_tree(ASTNode *node) {
 	return(errno);
 } 
 
-#ifdef DEBUG_TREE
+#if defined(DEBUG_TREE) || defined(DEBUG_PARSE)
 #include<stdio.h>
 int tree_view(ASTNode *node, int pad) {
 
@@ -48,6 +48,7 @@ int tree_view(ASTNode *node, int pad) {
 	return(errno);
 }
 
+#if !defined(DEBUG_PARSE)
 int main() {
 
 	// 2 . (20 - 5) / (2 + 1)
@@ -66,4 +67,5 @@ int main() {
 
 	return(errno);
 }
+#endif
 #endif

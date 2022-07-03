@@ -21,8 +21,7 @@ int stack_dump(Stack *stack) {
 	return(errno);
 }
 
-// pops something from stack. crashes the program if empty stack (for security
-// reasons)
+// pops something from stack. returns EADDRNOTAVAIL if empty stack
 int pop(Stack *stack, signed long *var) {
 
 	if (stack->dp >= stack->stack) {

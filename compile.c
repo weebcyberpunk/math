@@ -19,19 +19,20 @@ signed long *compile(ASTNode *root) {
 	return(text);
 }
 
-// parses the expression into an ast and them calls compiler function to compile
-// it into an *text
-//
-// returns the *text
-signed long *parse(char *exp) {
+// parses the exp into an ast and returns a *ASTNode
+ASTNode *parse(char *exp) {
 	
-	ASTNode *root = create_node(0, 0);
+	ASTNode *root = create_node(0, 0, NULL, NULL);
 
-	return(compile(root));
+	return(root);
 }
 
 #ifdef DEBUG_PARSE
+int tree_view(ASTNode *node, int pad);
 int main() {
-	parse("2*(20-5)/(2+1)");
+	ASTNode *root = parse("3*(20-5)/(2+1)");
+	tree_view(root, 0);
+	
+	return(errno);
 }
 #endif
