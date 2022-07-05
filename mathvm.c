@@ -77,9 +77,9 @@ signed long run() {
 #endif
 
 	signed long x, y;
-	while (*ip != $EXIT) {
+	while (*ip != EXIT) {
 		switch (*ip) {
-			case $ADD:
+			case ADD:
 				pop_vm(&x);
 				pop_vm(&y);
 				push_vm(y + x);
@@ -88,7 +88,7 @@ signed long run() {
 				stack_dump(stack);
 #endif
 				break;
-			case $SUB:
+			case SUB:
 				pop_vm(&x);
 				pop_vm(&y);
 				push_vm(y - x);
@@ -97,7 +97,7 @@ signed long run() {
 				stack_dump(stack);
 #endif
 				break;
-			case $MUL:
+			case MUL:
 				pop_vm(&x);
 				pop_vm(&y);
 				push_vm(y * x);
@@ -106,7 +106,7 @@ signed long run() {
 				stack_dump(stack);
 #endif
 				break;
-			case $DIV:
+			case DIV:
 				pop_vm(&x);
 				pop_vm(&y);
 				push_vm(y / x);
@@ -115,7 +115,7 @@ signed long run() {
 				stack_dump(stack);
 #endif
 				break;
-			case $PUSH:
+			case PUSH:
 				ip++;
 				push_vm(*ip);
 #ifdef DEBUG_VM

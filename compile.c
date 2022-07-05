@@ -5,6 +5,8 @@
 #include"mathvm.h"
 #include"ast.h"
 
+#define syntaxerr(msg) fprintf(stderr, "Syntax error: %s.\n", msg); exit(ENOTSUP);
+
 /*
  * author GG weebcyberpunk@gmail.com
  * version 0.0.0
@@ -22,7 +24,30 @@ signed long *compile(ASTNode *root) {
 // parses the exp into an ast and returns a *ASTNode
 ASTNode *parse(char *exp) {
 	
-	ASTNode *root = create_node(0, 0, NULL, NULL);
+	unsigned long brackets_lvl = 0;
+	signed long pos = -1;
+	ASTNode *root = NULL;
+	
+	char c;
+	while ((c = exp[pos++]) != EOF) {
+
+		if (c == '(') {
+			brackets_lvl++;
+
+		} else if (c == ')') {
+			if (brackets_lvl > 0)
+				brackets_lvl--;
+			else
+				syntaxerr("Closing bracket without opening one before");
+
+		}
+	}
+
+	if (brackets_lvl > 0)
+		syntaxerr("Unclosed brackets");
+
+	if (root == NULL)
+		syntaxerr("No operation at all");
 
 	return(root);
 }
@@ -30,7 +55,7 @@ ASTNode *parse(char *exp) {
 #ifdef DEBUG_PARSE
 int tree_view(ASTNode *node, int pad);
 int main() {
-	ASTNode *root = parse("3*(20-5)/(2+1)");
+	ASTNode *root = parse("2*(20-5)/(2+1)");
 	tree_view(root, 0);
 	
 	return(errno);

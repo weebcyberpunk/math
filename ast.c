@@ -52,15 +52,15 @@ int tree_view(ASTNode *node, int pad) {
 int main() {
 
 	// 2 . (20 - 5) / (2 + 1)
-	ASTNode *root 			= create_node($DIV,  0,  NULL, NULL);
-	root->left 			= create_node($MUL,  0,  NULL, NULL);
-	root->left->left 		= create_node($PUSH, 2,  NULL, NULL);
-	root->left->right 		= create_node($SUB,  0,  NULL, NULL);
-	root->left->right->left 	= create_node($PUSH, 20, NULL, NULL);
-	root->left->right->right 	= create_node($PUSH, 5,  NULL, NULL);
-	root->right 			= create_node($ADD,  0,  NULL, NULL);
-	root->right->left 		= create_node($PUSH, 2,  NULL, NULL);
-	root->right->right 		= create_node($PUSH, 1,  NULL, NULL);
+	ASTNode *root 			= create_node(DIV,  0,  NULL, NULL);
+	root->left 			= create_node(MUL,  0,  NULL, NULL);
+	root->left->left 		= create_node(PUSH, 2,  NULL, NULL);
+	root->left->right 		= create_node(SUB,  0,  NULL, NULL);
+	root->left->right->left 	= create_node(PUSH, 20, NULL, NULL);
+	root->left->right->right 	= create_node(PUSH, 5,  NULL, NULL);
+	root->right 			= create_node(ADD,  0,  NULL, NULL);
+	root->right->left 		= create_node(PUSH, 2,  NULL, NULL);
+	root->right->right 		= create_node(PUSH, 2,  NULL, NULL);
 
 	tree_view(root, 0);
 	discard_tree(root);
