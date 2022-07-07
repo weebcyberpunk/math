@@ -1,8 +1,8 @@
 typedef struct Stack {
-	signed long *dp;
-	signed long *stack;
-	signed long stack_size;
-	signed long stack_init_size;
+    signed long *dp;
+    signed long *stack;
+    signed long stack_size;
+    signed long stack_init_size;
 } Stack;
 
 int push(Stack *stack, signed long value);

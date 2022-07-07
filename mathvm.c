@@ -46,122 +46,122 @@ Stack *stack;
 
 int push_vm(signed long value) {
 
-	if (push(stack, value) != 0) {
-		int errv = errno;
-		fprintf(stderr, "ERROR: Cannot increase stack: %m\n");
-		exit(errv);
-	}
+    if (push(stack, value) != 0) {
+        int errv = errno;
+        fprintf(stderr, "ERROR: Cannot increase stack: %m\n");
+        exit(errv);
+    }
 
-	return(errno);
+    return(errno);
 }
 
 int pop_vm(signed long *pop_var) {
 
-	if (pop(stack, pop_var) != 0) {
-		int errv = errno;
-		fprintf(stderr, "ERROR: Cannot pop from empty stack: %m\n");
-		exit(errv);
-	}
+    if (pop(stack, pop_var) != 0) {
+        int errv = errno;
+        fprintf(stderr, "ERROR: Cannot pop from empty stack: %m\n");
+        exit(errv);
+    }
 
-	return(errno);
+    return(errno);
 }
 
 signed long run() {
 #ifdef DEBUG_VM
-	printf("REACHED RUN:\n");
-	printf("text: %p\n", text);
-	printf("ip: %p\n", ip);
-	printf("stack: %p\n", stack->stack);
-	printf("dp: %p\n", stack->dp);
-	printf("\n");
+    printf("REACHED RUN:\n");
+    printf("text: %p\n", text);
+    printf("ip: %p\n", ip);
+    printf("stack: %p\n", stack->stack);
+    printf("dp: %p\n", stack->dp);
+    printf("\n");
 #endif
 
-	signed long x, y;
-	while (*ip != EXIT) {
-		switch (*ip) {
-			case ADD:
-				pop_vm(&x);
-				pop_vm(&y);
-				push_vm(y + x);
+    signed long x, y;
+    while (*ip != EXIT) {
+        switch (*ip) {
+            case ADD:
+                pop_vm(&x);
+                pop_vm(&y);
+                push_vm(y + x);
 #ifdef DEBUG_VM
-				printf("push_vming on sum: %lu\n", x + y);
-				stack_dump(stack);
+                printf("push_vming on sum: %lu\n", x + y);
+                stack_dump(stack);
 #endif
-				break;
-			case SUB:
-				pop_vm(&x);
-				pop_vm(&y);
-				push_vm(y - x);
+                break;
+            case SUB:
+                pop_vm(&x);
+                pop_vm(&y);
+                push_vm(y - x);
 #ifdef DEBUG_VM
-				printf("push_vming on sub: %lu\n", y - x);
-				stack_dump(stack);
+                printf("push_vming on sub: %lu\n", y - x);
+                stack_dump(stack);
 #endif
-				break;
-			case MUL:
-				pop_vm(&x);
-				pop_vm(&y);
-				push_vm(y * x);
+                break;
+            case MUL:
+                pop_vm(&x);
+                pop_vm(&y);
+                push_vm(y * x);
 #ifdef DEBUG_VM
-				printf("push_vming on mul: %lu\n", y * x);
-				stack_dump(stack);
+                printf("push_vming on mul: %lu\n", y * x);
+                stack_dump(stack);
 #endif
-				break;
-			case DIV:
-				pop_vm(&x);
-				pop_vm(&y);
-				push_vm(y / x);
+                break;
+            case DIV:
+                pop_vm(&x);
+                pop_vm(&y);
+                push_vm(y / x);
 #ifdef DEBUG_VM
-				printf("push_vming on div: %lu\n", y / x);
-				stack_dump(stack);
+                printf("push_vming on div: %lu\n", y / x);
+                stack_dump(stack);
 #endif
-				break;
-			case PUSH:
-				ip++;
-				push_vm(*ip);
+                break;
+            case PUSH:
+                ip++;
+                push_vm(*ip);
 #ifdef DEBUG_VM
-				printf("push_vming: %lu\n", *ip);
-				stack_dump(stack);
+                printf("push_vming: %lu\n", *ip);
+                stack_dump(stack);
 #endif
-				break;
-			default:
-				fprintf(stderr, "ERROR: Invalid instruction %lux\n", *ip);
-				exit(ENOTSUP);
-		}
+                break;
+            default:
+                fprintf(stderr, "ERROR: Invalid instruction %lux\n", *ip);
+                exit(ENOTSUP);
+        }
 
-		ip++;
-	}
+        ip++;
+    }
 
-	signed long result = *stack->dp;
-	free(stack->stack);
-	free(stack);
+    signed long result = *stack->dp;
+    free(stack->stack);
+    free(stack);
 
-	return(result);
+    return(result);
 }
 
 // inits the machine. text needs to be ONLY code, get rid of the file
 // identificator before calling it.
 signed long init(signed long *_text) {
 
-	stack = stack_init(STACK_INIT_SIZE);
+    stack = stack_init(STACK_INIT_SIZE);
 
-	text = _text;
-	ip = text;
+    text = _text;
+    ip = text;
 
-	return(run());
+    return(run());
 }
 
 #ifdef DEBUG_VM
 int main() {
-	// 2 . (20 - 5) / (2 + 1)
-	signed long text[] = {
-		'<', 2, '<', 20, '<', 5,
-		'-',
-		'*',
-		'<', 2, '<', 1,
-		'+',
-		'/',
-		EOF
-	};
-	printf("%lu\n", init(text));
+    // 2 . (20 - 5) / (2 + 1)
+    signed long text[] = {
+        '<', 2, '<', 20, '<', 5,
+        '-',
+        '*',
+        '<', 2, '<', 1,
+        '+',
+        '/',
+        EOF
+    };
+    printf("%lu\n", init(text));
 }
 #endif
